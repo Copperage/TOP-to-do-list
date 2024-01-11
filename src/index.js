@@ -1,5 +1,6 @@
 import './styles/main.scss';
-import initWebsite from './modules/page-init';
+import initWebsite from './modules/page-content';
+// import initFunctionality from './modules/page-function';
 // import starSvg from './modules/svgs/star-f.svg';
 // import plusSvg from './modules/svgs/plus.svg';
 // import tickboxSvg from './modules/svgs/Tickbox.svg';
