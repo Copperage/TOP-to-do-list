@@ -1,3 +1,8 @@
+import starSvg from './svgs/star-f.svg';
+import plusSvg from './svgs/plus.svg';
+import tickboxSvg from './svgs/Tickbox.svg';
+import crossboxSvg from './svgs/Crossbox.svg';
+
 // Layout
 
 function createLayout() {
@@ -32,49 +37,130 @@ function createHeader() {
 // Left side/Navbar
 
 function createNav() {
-	const inboxList = document.createElement('ul');
-	inboxList.className = 'inbox';
+	function starSvgImport() {
+		const element = document.createElement('div');
 
-	let inboxHeader = document.createElement('h2');
-	inboxHeader.textContent = 'Home';
+		element.innerHTML = starSvg;
 
-	let today = document.createElement('li');
-	today.textContent = 'Today';
+		return element;
+	}
 
-	let thisWeek = document.createElement('li');
-	thisWeek.textContent = 'This Week';
+	function plusSvgImport() {
+		const element = document.createElement('div');
 
-	let important = document.createElement('li');
-	important.textContent = 'Important';
+		element.innerHTML = plusSvg;
+
+		return element;
+	}
+
+	function InboxSection() {
+		const inboxList = document.createElement('ul');
+		inboxList.className = 'inbox';
+
+		let inboxHeader = document.createElement('h2');
+		inboxHeader.textContent = 'Home';
+
+		let today = document.createElement('li');
+		today.textContent = 'Today';
+
+		let thisWeek = document.createElement('li');
+		thisWeek.textContent = 'This Week';
+
+		let important = document.createElement('li');
+		important.className = 'important';
+
+		leftDiv.appendChild(inboxList);
+
+		inboxList.appendChild(inboxHeader);
+		inboxList.appendChild(today);
+		inboxList.appendChild(thisWeek);
+		inboxList.appendChild(important);
+		important.appendChild(starSvgImport());
+		important.appendChild(document.createTextNode('Important'));
+
+		const navList = inboxList.querySelectorAll('li');
+
+		navList.forEach((item) => {
+			item.classList.add('nav-li');
+		});
+	}
 
 	let separator = document.createElement('div');
 	separator.className = 'seperator';
 
-	const projectsList = document.createElement('ul');
-	projectsList.className = 'inbox';
+	function ProjectsSection() {
+		const projectsList = document.createElement('ul');
+		projectsList.className = 'projects';
 
-	let projectsHeader = document.createElement('h2');
-	projectsHeader.textContent = 'Projects';
+		let projectsHeader = document.createElement('h2');
+		projectsHeader.textContent = 'Projects';
+
+		let addProject = document.createElement('li');
+
+		leftDiv.appendChild(projectsList);
+		projectsList.appendChild(projectsHeader);
+		projectsList.appendChild(addProject);
+		addProject.appendChild(plusSvgImport());
+		addProject.appendChild(document.createTextNode('Add Project'));
+	}
+
+	function Footer() {
+		let footerText = document.createElement('footer');
+		let githubLink = document.createElement('a');
+		githubLink.href = 'https://github.com/Copperage/TOP-to-do-list';
+		githubLink.textContent = 'Github';
+		footerText.appendChild(githubLink);
+		footerText.innerHTML += ' | © 2023 Copperage';
+
+		leftDiv.appendChild(footerText);
+	}
 
 	const leftDiv = document.querySelector('.left');
 
-	leftDiv.appendChild(inboxList);
-
-	inboxList.appendChild(inboxHeader);
-	inboxList.appendChild(today);
-	inboxList.appendChild(thisWeek);
-	inboxList.appendChild(important);
-
+	InboxSection();
 	leftDiv.appendChild(separator);
+	ProjectsSection();
+	Footer();
+}
 
-	leftDiv.appendChild(projectsList);
-	projectsList.appendChild(projectsHeader);
+// Right Side
+function createCards() {
+	function tickboxSvgImport() {
+		const element = document.createElement('div');
 
-	const navList = inboxList.querySelectorAll('li');
+		element.innerHTML = tickboxSvg;
 
-	navList.forEach((item) => {
-		item.classList.add('nav-li');
-	});
+		return element;
+	}
+
+	function crossboxSvgImport() {
+		const element = document.createElement('div');
+
+		element.innerHTML = crossboxSvg;
+
+		return element;
+	}
+
+	let cardDiv = document.createElement('div');
+	cardDiv.className = 'card';
+
+	let cardHeader = document.createElement('h2');
+	cardHeader.textContent = `Important Reminder`;
+
+	let cardText = document.createElement('p');
+	cardText.textContent = `Temporary text - Do this thing that you've made a very important reminder of.`;
+
+	let cardDivNav = document.createElement('div');
+	cardDivNav.className = 'card-nav';
+
+	const rightDiv = document.querySelector('.right');
+
+	rightDiv.appendChild(cardDiv);
+	cardDiv.appendChild(cardHeader);
+	cardDiv.appendChild(cardText);
+	cardDiv.appendChild(cardDivNav);
+	cardDivNav.appendChild(tickboxSvgImport());
+	cardDivNav.appendChild(crossboxSvgImport());
 }
 
 function setActive(selectedItem) {
@@ -91,6 +177,7 @@ function initWebsite() {
 	createLayout();
 	createHeader();
 	createNav();
+	createCards();
 
 	const navList = document.querySelectorAll('.nav-li');
 	const defaultNavList = document.querySelector('.nav-li');
