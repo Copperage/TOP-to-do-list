@@ -53,7 +53,7 @@ function createNav() {
 		return element;
 	}
 
-	function InboxSection() {
+	function inboxSection() {
 		const inboxList = document.createElement('ul');
 		inboxList.className = 'inbox';
 
@@ -88,7 +88,7 @@ function createNav() {
 	let separator = document.createElement('div');
 	separator.className = 'seperator';
 
-	function ProjectsSection() {
+	function projectsSection() {
 		const projectsList = document.createElement('ul');
 		projectsList.className = 'projects';
 
@@ -117,14 +117,32 @@ function createNav() {
 
 	const leftDiv = document.querySelector('.left');
 
-	InboxSection();
+	inboxSection();
 	leftDiv.appendChild(separator);
-	ProjectsSection();
+	projectsSection();
 	Footer();
 }
 
 // Right Side
-function createCards() {
+function createCardButton() {
+	function plusSvgImport() {
+		const element = document.createElement('div');
+
+		element.innerHTML = plusSvg;
+
+		return element;
+	}
+
+	const rightDiv = document.querySelector('.right');
+
+	let plusButtonDiv = document.createElement('div');
+	plusButtonDiv.className = 'plusButton';
+
+	rightDiv.appendChild(plusButtonDiv);
+	plusButtonDiv.appendChild(plusSvgImport());
+}
+
+export function createCards() {
 	function tickboxSvgImport() {
 		const element = document.createElement('div');
 
@@ -177,6 +195,7 @@ function initWebsite() {
 	createLayout();
 	createHeader();
 	createNav();
+	createCardButton();
 	createCards();
 
 	const navList = document.querySelectorAll('.nav-li');
