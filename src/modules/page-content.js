@@ -123,13 +123,36 @@ function createNav() {
 	Footer();
 }
 
+function setActive(selectedItem) {
+	const navItems = document.querySelectorAll('.nav-li');
+
+	navItems.forEach((item) => {
+		item.classList.remove('active');
+	});
+
+	selectedItem.classList.add('active');
+}
+
 // Right Side
+
+// Card reminder creation functionality
 function createCards() {
 	function tickboxSvgImport() {
 		const element = document.createElement('div');
 		element.className = 'confirm';
 
 		element.innerHTML = tickboxSvg;
+
+		element.addEventListener('click', () => {
+			const completedText = document.createElement('span');
+
+			cardHeader.textContent += ' - ';
+
+			completedText.textContent = 'Completed!';
+			completedText.classList.add('completed-text');
+
+			cardHeader.appendChild(completedText);
+		});
 
 		return element;
 	}
@@ -151,10 +174,12 @@ function createCards() {
 	cardDiv.className = 'card';
 
 	let cardHeader = document.createElement('h2');
-	cardHeader.textContent = `Important Reminder`;
+	let cardHeaderPrompt = prompt('Enter title');
+	cardHeader.textContent = cardHeaderPrompt;
 
 	let cardText = document.createElement('p');
-	cardText.textContent = `Temporary text - Do this thing that you've made a very important reminder of.`;
+	let cardTextPrompt = prompt('Enter your description');
+	cardText.textContent = cardTextPrompt;
 
 	let cardDivNav = document.createElement('div');
 	cardDivNav.className = 'card-nav';
@@ -190,16 +215,6 @@ function createCardButton() {
 	plusButtonDiv.addEventListener('click', function () {
 		createCards();
 	});
-}
-
-function setActive(selectedItem) {
-	const navItems = document.querySelectorAll('.nav-li');
-
-	navItems.forEach((item) => {
-		item.classList.remove('active');
-	});
-
-	selectedItem.classList.add('active');
 }
 
 export default function initWebsite() {
