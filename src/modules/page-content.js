@@ -124,27 +124,10 @@ function createNav() {
 }
 
 // Right Side
-function createCardButton() {
-	function plusSvgImport() {
-		const element = document.createElement('div');
-
-		element.innerHTML = plusSvg;
-
-		return element;
-	}
-
-	const rightDiv = document.querySelector('.right');
-
-	let plusButtonDiv = document.createElement('div');
-	plusButtonDiv.className = 'plusButton';
-
-	rightDiv.appendChild(plusButtonDiv);
-	plusButtonDiv.appendChild(plusSvgImport());
-}
-
-export function createCards() {
+function createCards() {
 	function tickboxSvgImport() {
 		const element = document.createElement('div');
+		element.className = 'confirm';
 
 		element.innerHTML = tickboxSvg;
 
@@ -153,8 +136,13 @@ export function createCards() {
 
 	function crossboxSvgImport() {
 		const element = document.createElement('div');
+		element.className = 'delete';
 
 		element.innerHTML = crossboxSvg;
+
+		element.addEventListener('click', () => {
+			cardDiv.remove();
+		});
 
 		return element;
 	}
@@ -181,6 +169,29 @@ export function createCards() {
 	cardDivNav.appendChild(crossboxSvgImport());
 }
 
+function createCardButton() {
+	function plusSvgImport() {
+		const element = document.createElement('div');
+		element.className = 'create-card';
+
+		element.innerHTML = plusSvg;
+
+		return element;
+	}
+
+	const rightDiv = document.querySelector('.right');
+
+	let plusButtonDiv = document.createElement('div');
+	plusButtonDiv.className = 'plusButton';
+
+	rightDiv.appendChild(plusButtonDiv);
+	plusButtonDiv.appendChild(plusSvgImport());
+
+	plusButtonDiv.addEventListener('click', function () {
+		createCards();
+	});
+}
+
 function setActive(selectedItem) {
 	const navItems = document.querySelectorAll('.nav-li');
 
@@ -191,12 +202,11 @@ function setActive(selectedItem) {
 	selectedItem.classList.add('active');
 }
 
-function initWebsite() {
+export default function initWebsite() {
 	createLayout();
 	createHeader();
 	createNav();
 	createCardButton();
-	createCards();
 
 	const navList = document.querySelectorAll('.nav-li');
 	const defaultNavList = document.querySelector('.nav-li');
@@ -207,8 +217,4 @@ function initWebsite() {
 			setActive(item);
 		});
 	});
-
-	// loadContent();
 }
-
-export default initWebsite;
