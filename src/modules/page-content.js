@@ -37,14 +37,6 @@ function createHeader() {
 // Left side/Navbar
 
 function createNav() {
-	function starSvgImport() {
-		const element = document.createElement('div');
-
-		element.innerHTML = starSvg;
-
-		return element;
-	}
-
 	function plusSvgImport() {
 		const element = document.createElement('div');
 
@@ -57,7 +49,7 @@ function createNav() {
 		const inboxList = document.createElement('ul');
 		inboxList.className = 'inbox';
 
-		let inboxHeader = document.createElement('h2');
+		let inboxHeader = document.createElement('li');
 		inboxHeader.textContent = 'Home';
 
 		let today = document.createElement('li');
@@ -66,17 +58,11 @@ function createNav() {
 		let thisWeek = document.createElement('li');
 		thisWeek.textContent = 'This Week';
 
-		let important = document.createElement('li');
-		important.className = 'important';
-
 		leftDiv.appendChild(inboxList);
 
 		inboxList.appendChild(inboxHeader);
 		inboxList.appendChild(today);
 		inboxList.appendChild(thisWeek);
-		inboxList.appendChild(important);
-		important.appendChild(starSvgImport());
-		important.appendChild(document.createTextNode('Important'));
 
 		const navList = inboxList.querySelectorAll('li');
 
@@ -122,6 +108,14 @@ function createNav() {
 	projectsSection();
 	Footer();
 }
+function clearRightContent() {
+	const rightDiv = document.querySelector('.right');
+	const cards = rightDiv.querySelectorAll('.card');
+
+	cards.forEach((card) => {
+		card.remove();
+	});
+}
 
 function setActive(selectedItem) {
 	const navItems = document.querySelectorAll('.nav-li');
@@ -131,12 +125,33 @@ function setActive(selectedItem) {
 	});
 
 	selectedItem.classList.add('active');
+
+	if (
+		selectedItem.textContent === 'Home' ||
+		selectedItem.textContent === 'Today' ||
+		selectedItem.textContent === 'This Week'
+	) {
+		clearRightContent();
+	}
 }
 
 // Right Side
 
 // Card reminder creation functionality
-function createCards() {
+function createCards(header, text) {
+	function crossboxSvgImport() {
+		const element = document.createElement('div');
+		element.className = 'delete';
+
+		element.innerHTML = crossboxSvg;
+
+		element.addEventListener('click', () => {
+			cardDiv.remove();
+		});
+
+		return element;
+	}
+
 	function tickboxSvgImport() {
 		const element = document.createElement('div');
 		element.className = 'confirm';
@@ -174,11 +189,11 @@ function createCards() {
 	cardDiv.className = 'card';
 
 	let cardHeader = document.createElement('h2');
-	let cardHeaderPrompt = prompt('Enter title');
+	let cardHeaderPrompt = header || prompt('Enter title');
 	cardHeader.textContent = cardHeaderPrompt;
 
 	let cardText = document.createElement('p');
-	let cardTextPrompt = prompt('Enter your description');
+	let cardTextPrompt = text || prompt('Enter your description');
 	cardText.textContent = cardTextPrompt;
 
 	let cardDivNav = document.createElement('div');
@@ -204,6 +219,15 @@ function createCardButton() {
 		return element;
 	}
 
+	function crossboxSvgImport() {
+		const element = document.createElement('div');
+		element.className = 'close';
+
+		element.innerHTML = crossboxSvg;
+
+		return element;
+	}
+
 	const rightDiv = document.querySelector('.right');
 
 	let plusButtonDiv = document.createElement('div');
@@ -212,8 +236,60 @@ function createCardButton() {
 	rightDiv.appendChild(plusButtonDiv);
 	plusButtonDiv.appendChild(plusSvgImport());
 
-	plusButtonDiv.addEventListener('click', function () {
-		createCards();
+	const plusSvgElement = plusButtonDiv.querySelector('.create-card');
+
+	// plusButtonDiv.addEventListener('click', () => {
+	// 	createCards();
+	// });
+
+	plusSvgElement.addEventListener('click', () => {
+		const modal = document.createElement('div');
+		modal.className = 'modal';
+
+		const modalContent = document.createElement('div');
+		modalContent.className = 'modal-content';
+
+		const title = document.createElement('h3');
+		title.textContent = 'Title';
+
+		const titleInput = document.createElement('input');
+		titleInput.placeholder = 'Enter title';
+
+		const description = document.createElement('h3');
+		description.textContent = 'Description';
+
+		const descriptionInput = document.createElement('input');
+		descriptionInput.placeholder = 'Enter description';
+
+		const addButton = document.createElement('button');
+		addButton.textContent = 'Add Card';
+
+		addButton.addEventListener('click', () => {
+			const cardTitle = titleInput.value;
+			const cardDescription = descriptionInput.value;
+
+			if (cardTitle && cardDescription) {
+				createCards(cardTitle, cardDescription);
+				modal.remove();
+			} else {
+				alert('Please add a title and descripton for your card.');
+			}
+		});
+
+		modalContent.appendChild(title);
+		modalContent.appendChild(titleInput);
+		modalContent.appendChild(description);
+		modalContent.appendChild(descriptionInput);
+		modalContent.appendChild(addButton);
+		modalContent.appendChild(crossboxSvgImport());
+
+		modal.appendChild(modalContent);
+		document.body.appendChild(modal);
+
+		const closeButton = document.querySelector('.close');
+		closeButton.addEventListener('click', () => {
+			modal.remove();
+		});
 	});
 }
 
@@ -222,13 +298,17 @@ export default function initWebsite() {
 	createHeader();
 	createNav();
 	createCardButton();
+	createCards('example header', 'example text');
+	createCards('example header', 'example text');
+	createCards('example header', 'example text');
 
 	const navList = document.querySelectorAll('.nav-li');
 	const defaultNavList = document.querySelector('.nav-li');
 	setActive(defaultNavList);
 
 	navList.forEach((item) => {
-		item.addEventListener('click', function () {
+		item.addEventListener('click', () => {
+			clearRightContent();
 			setActive(item);
 		});
 	});
