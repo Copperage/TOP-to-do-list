@@ -1,4 +1,3 @@
-import starSvg from './svgs/star-f.svg';
 import plusSvg from './svgs/plus.svg';
 import tickboxSvg from './svgs/Tickbox.svg';
 import crossboxSvg from './svgs/Crossbox.svg';
@@ -45,6 +44,21 @@ function createNav() {
 		return element;
 	}
 
+	function crossboxSvgImport(projectsList, newProject) {
+		const element = document.createElement('div');
+		element.className = 'close';
+
+		element.innerHTML = crossboxSvg;
+
+		element.addEventListener('click', () => {
+			if (newProject) {
+				projectsList.removeChild(newProject);
+			}
+		});
+
+		return element;
+	}
+
 	function inboxSection() {
 		const inboxList = document.createElement('ul');
 		inboxList.className = 'inbox';
@@ -81,13 +95,26 @@ function createNav() {
 		let projectsHeader = document.createElement('h2');
 		projectsHeader.textContent = 'Projects';
 
-		let addProject = document.createElement('li');
+		let newProjectButton = document.createElement('li');
+
+		let newProject;
+
+		newProjectButton.addEventListener('click', () => {
+			let newProject = document.createElement('li');
+			newProject.textContent = prompt('Enter your projects name');
+			newProject.className = 'new-project';
+			newProject.appendChild(crossboxSvgImport(projectsList, newProject));
+
+			projectsList.appendChild(newProject);
+			projectsList.appendChild(newProjectButton);
+		});
 
 		leftDiv.appendChild(projectsList);
 		projectsList.appendChild(projectsHeader);
-		projectsList.appendChild(addProject);
-		addProject.appendChild(plusSvgImport());
-		addProject.appendChild(document.createTextNode('Add Project'));
+		projectsList.appendChild(newProjectButton);
+
+		newProjectButton.appendChild(plusSvgImport());
+		newProjectButton.appendChild(document.createTextNode('Add Project'));
 	}
 
 	function Footer() {
@@ -95,6 +122,7 @@ function createNav() {
 		let githubLink = document.createElement('a');
 		githubLink.href = 'https://github.com/Copperage/TOP-to-do-list';
 		githubLink.textContent = 'Github';
+		githubLink.target = '_blank';
 		footerText.appendChild(githubLink);
 		footerText.innerHTML += ' | © 2023 Copperage';
 
@@ -238,10 +266,6 @@ function createCardButton() {
 
 	const plusSvgElement = plusButtonDiv.querySelector('.create-card');
 
-	// plusButtonDiv.addEventListener('click', () => {
-	// 	createCards();
-	// });
-
 	plusSvgElement.addEventListener('click', () => {
 		const modal = document.createElement('div');
 		modal.className = 'modal';
@@ -298,9 +322,6 @@ export default function initWebsite() {
 	createHeader();
 	createNav();
 	createCardButton();
-	createCards('example header', 'example text');
-	createCards('example header', 'example text');
-	createCards('example header', 'example text');
 
 	const navList = document.querySelectorAll('.nav-li');
 	const defaultNavList = document.querySelector('.nav-li');
