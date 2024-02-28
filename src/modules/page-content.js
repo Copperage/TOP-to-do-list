@@ -95,26 +95,48 @@ function createNav() {
 		let projectsHeader = document.createElement('h2');
 		projectsHeader.textContent = 'Projects';
 
-		let newProjectButton = document.createElement('li');
+		let newProjectButton = document.createElement('form');
+		newProjectButton.classList.add('new-project');
 
-		let newProject;
+		let newProjectInput = document.createElement('input');
+		newProjectInput.type = 'text';
+		newProjectInput.placeholder = 'Enter project name';
 
-		newProjectButton.addEventListener('click', () => {
+		let plusSvg = plusSvgImport();
+
+		// Add Project Functionality
+		function newProjectFunctionality() {
+			event.preventDefault();
+
 			let newProject = document.createElement('li');
-			newProject.textContent = prompt('Enter your projects name');
+			let projectName = newProjectInput.value.trim();
+			if (projectName == null || projectName === '') return;
+
+			newProject.textContent = projectName;
 			newProject.className = 'new-project';
 			newProject.appendChild(crossboxSvgImport(projectsList, newProject));
 
 			projectsList.appendChild(newProject);
 			projectsList.appendChild(newProjectButton);
+
+			newProjectButton.reset();
+		}
+
+		plusSvg.addEventListener('click', () => {
+			newProjectFunctionality();
 		});
 
-		leftDiv.appendChild(projectsList);
+		newProjectButton.addEventListener('submit', () => {
+			newProjectFunctionality();
+		});
+
 		projectsList.appendChild(projectsHeader);
 		projectsList.appendChild(newProjectButton);
 
-		newProjectButton.appendChild(plusSvgImport());
-		newProjectButton.appendChild(document.createTextNode('Add Project'));
+		newProjectButton.appendChild(plusSvg);
+		newProjectButton.appendChild(newProjectInput);
+
+		leftDiv.appendChild(projectsList);
 	}
 
 	function Footer() {

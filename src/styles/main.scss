@@ -79,7 +79,8 @@ header {
 }
 
 .left li,
-.left h2 {
+.left h2,
+.left form {
 	position: relative;
 	list-style: none;
 	margin: 1rem;
@@ -90,7 +91,8 @@ header {
 	gap: 0.25rem;
 }
 
-.left li {
+.left li,
+.left form {
 	cursor: pointer;
 	border-radius: 10px;
 }
@@ -110,6 +112,22 @@ svg {
 	width: 80%;
 	background-color: var(--color-text-headernav);
 	opacity: 50%;
+}
+
+.projects input {
+	padding: 0.25rem;
+	font-size: 1em;
+	background-color: transparent;
+	color: var(--color-text-headernav);
+	width: 80%;
+	border: none;
+	border-bottom: 2px solid transparent; /* Initial border color */
+	transition: border-bottom-color 0.2s;
+}
+
+.projects input:focus {
+	outline: none;
+	border-bottom: 2px solid var(--color-text-headernav);
 }
 
 footer {
@@ -298,13 +316,13 @@ footer a:active {
 }
 
 .new-project > .close {
-	margin-right: 5px;
 	color: var(--color-text-headernav);
+	opacity: 0.25;
 }
 
 .new-project > .close:hover,
 .new-project > .close:focus {
-	color: var(--color-text-main);
+	opacity: 1;
 }
 
 .close {
