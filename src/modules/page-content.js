@@ -113,7 +113,7 @@ function createNav() {
 			if (projectName == null || projectName === '') return;
 
 			newProject.textContent = projectName;
-			newProject.className = 'new-project';
+			newProject.className = 'nav-li';
 			newProject.appendChild(crossboxSvgImport(projectsList, newProject));
 
 			projectsList.appendChild(newProject);
@@ -122,11 +122,11 @@ function createNav() {
 			newProjectButton.reset();
 		}
 
-		plusSvg.addEventListener('click', () => {
+		plusSvg.addEventListener('click', (event) => {
 			newProjectFunctionality();
 		});
 
-		newProjectButton.addEventListener('submit', () => {
+		newProjectButton.addEventListener('submit', (event) => {
 			newProjectFunctionality();
 		});
 
@@ -176,15 +176,14 @@ function setActive(selectedItem) {
 
 	selectedItem.classList.add('active');
 
-	if (
-		selectedItem.textContent === 'Home' ||
-		selectedItem.textContent === 'Today' ||
-		selectedItem.textContent === 'This Week'
-	) {
-		clearRightContent();
-	}
-}
+	document.addEventListener('click', (event) => {
+		const clickedNavItem = event.target.closest('.nav-li');
 
+		if (clickedNavItem) {
+			setActive(clickedNavItem);
+		}
+	});
+}
 // Right Side
 
 // Card reminder creation functionality
@@ -348,11 +347,4 @@ export default function initWebsite() {
 	const navList = document.querySelectorAll('.nav-li');
 	const defaultNavList = document.querySelector('.nav-li');
 	setActive(defaultNavList);
-
-	navList.forEach((item) => {
-		item.addEventListener('click', () => {
-			clearRightContent();
-			setActive(item);
-		});
-	});
 }
