@@ -36,6 +36,8 @@ function createHeader() {
 // Left side/Navbar
 
 function createNav() {
+	let projects = [];
+
 	function plusSvgImport() {
 		const element = document.createElement('div');
 
@@ -44,16 +46,21 @@ function createNav() {
 		return element;
 	}
 
-	function crossboxSvgImport(projectsList, newProject) {
+	function crossboxSvgImport(projectsList, projectValue, projectName) {
 		const element = document.createElement('div');
 		element.className = 'close';
 
 		element.innerHTML = crossboxSvg;
 
-		element.addEventListener('click', () => {
-			if (newProject) {
-				projectsList.removeChild(newProject);
+		element.addEventListener('click', function () {
+			const index = projects.findIndex(
+				(project) => project.name === projectName
+			);
+			if (index !== -1) {
+				projects.splice(index, 1);
 			}
+
+			projectsList.removeChild(projectValue);
 		});
 
 		return element;
@@ -90,53 +97,71 @@ function createNav() {
 
 	function projectsSection() {
 		const projectsList = document.createElement('ul');
-		projectsList.className = 'projects';
+		projectsList.classList.add('projects');
 
 		let projectsHeader = document.createElement('h2');
 		projectsHeader.textContent = 'Projects';
 
-		let newProjectButton = document.createElement('form');
-		newProjectButton.classList.add('new-project');
+		let projectForm = document.createElement('form');
 
-		let newProjectInput = document.createElement('input');
-		newProjectInput.type = 'text';
-		newProjectInput.placeholder = 'Enter project name';
+		let projectInput = document.createElement('input');
+		projectInput.type = 'text';
+		projectInput.placeholder = 'Enter project name';
 
 		let plusSvg = plusSvgImport();
 
-		// Add Project Functionality
-		function newProjectFunctionality() {
-			event.preventDefault();
-
-			let newProject = document.createElement('li');
-			let projectName = newProjectInput.value.trim();
-			if (projectName == null || projectName === '') return;
-
-			newProject.textContent = projectName;
-			newProject.className = 'nav-li';
-			newProject.appendChild(crossboxSvgImport(projectsList, newProject));
-
-			projectsList.appendChild(newProject);
-			projectsList.appendChild(newProjectButton);
-
-			newProjectButton.reset();
-		}
-
-		plusSvg.addEventListener('click', (event) => {
-			newProjectFunctionality();
-		});
-
-		newProjectButton.addEventListener('submit', (event) => {
-			newProjectFunctionality();
-		});
-
 		projectsList.appendChild(projectsHeader);
-		projectsList.appendChild(newProjectButton);
-
-		newProjectButton.appendChild(plusSvg);
-		newProjectButton.appendChild(newProjectInput);
+		projectsList.appendChild(projectForm);
+		projectForm.appendChild(plusSvg);
+		projectForm.appendChild(projectInput);
 
 		leftDiv.appendChild(projectsList);
+
+		function projectRender() {
+			clearProjects(projectsList);
+
+			projectsList.appendChild(projectsHeader);
+			projectsList.appendChild(projectForm);
+
+			projects.forEach((project) => {
+				const projectValue = document.createElement('li');
+				projectValue.classList.add('nav-li');
+				projectValue.textContent = project.name;
+
+				projectsList.appendChild(projectValue);
+
+				projectValue.appendChild(
+					crossboxSvgImport(projectsList, projectValue, project.name)
+				);
+			});
+		}
+
+		function projectFunction(e) {
+			e.preventDefault();
+
+			let projectName = projectInput.value;
+			if (projectName == null || projectName === '') return;
+
+			const project = createProjectList(projectName);
+			projectInput.value = null;
+			projects.push(project);
+			projectRender();
+			// console.log(projects);
+		}
+
+		function createProjectList(name) {
+			return { id: Date.now().toString(), name: name, tasks: [] };
+		}
+
+		function clearProjects(element) {
+			while (element.firstChild) {
+				element.removeChild(element.firstChild);
+			}
+		}
+
+		plusSvg.addEventListener('click', projectFunction);
+
+		projectForm.addEventListener('submit', projectFunction);
 	}
 
 	function Footer() {
@@ -158,6 +183,7 @@ function createNav() {
 	projectsSection();
 	Footer();
 }
+
 function clearRightContent() {
 	const rightDiv = document.querySelector('.right');
 	const cards = rightDiv.querySelectorAll('.card');
@@ -187,7 +213,7 @@ function setActive(selectedItem) {
 // Right Side
 
 // Card reminder creation functionality
-function createCards(header, text) {
+function createCards(header, text, projectName) {
 	function crossboxSvgImport() {
 		const element = document.createElement('div');
 		element.className = 'delete';
@@ -256,6 +282,8 @@ function createCards(header, text) {
 	cardDiv.appendChild(cardDivNav);
 	cardDivNav.appendChild(tickboxSvgImport());
 	cardDivNav.appendChild(crossboxSvgImport());
+
+	addTaskToLocalStorage(header, projectName);
 }
 
 function createCardButton() {
