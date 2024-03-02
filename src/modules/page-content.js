@@ -1,6 +1,10 @@
 import plusSvg from './svgs/plus.svg';
 import tickboxSvg from './svgs/Tickbox.svg';
 import crossboxSvg from './svgs/Crossbox.svg';
+import {
+	saveProjectsToLocalStorage,
+	loadProjectsFromLocalStorage,
+} from './page-storage';
 
 // Layout
 
@@ -36,7 +40,7 @@ function createHeader() {
 // Left side/Navbar
 
 function createNav() {
-	let projects = [];
+	let projects = loadProjectsFromLocalStorage() || [];
 
 	function plusSvgImport() {
 		const element = document.createElement('div');
@@ -61,6 +65,8 @@ function createNav() {
 			}
 
 			projectsList.removeChild(projectValue);
+			saveProjectsToLocalStorage(projects);
+			console.log(projects);
 		});
 
 		return element;
@@ -145,6 +151,7 @@ function createNav() {
 			const project = createProjectList(projectName);
 			projectInput.value = null;
 			projects.push(project);
+			saveProjectsToLocalStorage(projects);
 			projectRender();
 			// console.log(projects);
 		}
@@ -162,6 +169,8 @@ function createNav() {
 		plusSvg.addEventListener('click', projectFunction);
 
 		projectForm.addEventListener('submit', projectFunction);
+
+		projectRender();
 	}
 
 	function Footer() {
@@ -282,8 +291,6 @@ function createCards(header, text, projectName) {
 	cardDiv.appendChild(cardDivNav);
 	cardDivNav.appendChild(tickboxSvgImport());
 	cardDivNav.appendChild(crossboxSvgImport());
-
-	addTaskToLocalStorage(header, projectName);
 }
 
 function createCardButton() {
